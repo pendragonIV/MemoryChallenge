@@ -17,11 +17,26 @@ public class PlayerData : ScriptableObject
     [SerializeField]
     private List<Animal> animals;
     [SerializeField]
-    private Animal currentAnimal;
+    private int currentAnimalIndex;
 
-    public void SetCurrentAnimal(Animal animal)
+    public void SetGold(int gold)
     {
-        currentAnimal = animal;
+        this.gold = gold;
+    }
+
+    public int GetGold()
+    {
+        return gold;
+    }
+
+    public void SetCurrentAnimalIndex(int index)
+    {
+        currentAnimalIndex = index;
+    }
+
+    public int GetCurrentAnimalIndex()
+    {
+        return currentAnimalIndex;
     }
 
     public List<Animal> GetAnimals()
@@ -29,18 +44,23 @@ public class PlayerData : ScriptableObject
         return animals;
     }
 
+    public Animal GetAnimalAt(int index)
+    {
+        return animals[index];
+    }
+
     public void SetAnimalStatus(int index, bool isBought, bool isUsing)
     {
         animals[index] = animals[index].ChangeAnimalStatus(isBought, isUsing);
     }
 
+
     #region Save and Load
     public void SaveDataJSON()
     {
         string animalsData = JsonHelper.ToJson(animals.ToArray(), true);
-        string currentAnimalData = JsonUtility.ToJson(currentAnimal,true);
 
-        string content = "{\"gold\":" + gold + ",\"animals\":" + animalsData + ",\"currentAnimal\":" + currentAnimalData + "}";
+        string content = "{\"gold\":" + gold + ",\"animals\":" + animalsData + ",\"currentAnimalIndex\":" + currentAnimalIndex + "}";
         WriteFile(content);
     }
 
@@ -108,6 +128,7 @@ public struct Animal
         {
             animalType = this.animalType,
             price = this.price,
+            animalImage = this.animalImage,
             isBought = isBought,
             isUsing = isUsing
         };

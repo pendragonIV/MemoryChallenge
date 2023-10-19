@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
+    public static Shop instance;
+
     [SerializeField]
     private Transform popupPanel;
 
@@ -14,23 +16,49 @@ public class Shop : MonoBehaviour
     private Transform characterPrefab;
 
     [SerializeField]
-    private PlayerData playerData;
+    public PlayerData playerData;
+
+    [SerializeField]
+    private Text coinText;
+
+    [SerializeField]
+    private Color defaultColor;
+    [SerializeField]
+    private Color disabledColor;
+
 
     private void Awake()
     {
         HidePopup();
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
     }
 
     private void Start()
     {
         ShopInitialize();
+        SetCoin();
     }
 
-    private void ShopInitialize()
+    public void ShopInitialize()
     {
+        foreach(Transform child in characterContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        int index = 0;
         playerData.GetAnimals().ForEach(animal =>
         {
             Transform character = Instantiate(characterPrefab, characterContainer);
+            character.name = index++.ToString();
+            //Set data for holder
             SetCharacterShop(character, animal);
         });
     }
@@ -47,7 +75,7 @@ public class Shop : MonoBehaviour
         Text optionText = optionButton.GetChild(0).GetComponent<Text>();
 
         TickIfCharacterUsing(animalData, tick);
-        SetCharacterOption(animalData, characterPrice, optionText);
+        SetCharacterOption(animalData, characterPrice, optionButton, optionText);
         SetCharacterImage(animalData, characterImg);
     }
 
@@ -69,25 +97,52 @@ public class Shop : MonoBehaviour
         }
     }
 
-    private void SetCharacterOption(Animal animalData, Text characterPrice, Text optionText)
+    private void SetCharacterOption(Animal animalData, Text characterPrice, Transform optionButton, Text optionText)
     {
 
         if (animalData.isBought)
         {
             characterPrice.gameObject.SetActive(false);
+            optionButton.GetComponent<Image>().color = defaultColor;
             optionText.text = "USE";
         }
         else
         {
             characterPrice.text = animalData.price.ToString();
             optionText.text = "BUY";
+            
+            if(playerData.GetGold() < animalData.price)
+            {
+                optionButton.GetComponent<Button>().interactable = false;
+                optionButton.GetComponent<Image>().color = disabledColor;
+            }
+            else
+            {
+                optionButton.GetComponent<Button>().interactable = true;
+                optionButton.GetComponent<Image>().color = defaultColor;
+            }
         }
 
     }
 
-    public void ShowPopup()
+    public void SetCoin()
+    {
+        coinText.text = playerData.GetGold().ToString();
+    }
+
+    public void Buy(int index)
+    {
+        playerData.SetGold(playerData.GetGold() - playerData.GetAnimalAt(index).price);
+        playerData.SetAnimalStatus(index, true, false);
+    }
+
+    public void ShowPopup(int index)
     {
         popupPanel.gameObject.SetActive(true);
+
+        Image characterImg = popupPanel.GetChild(0).GetChild(0).GetComponent<Image>();
+
+        characterImg.sprite = playerData.GetAnimalAt(index).animalImage;
     }
 
     public void HidePopup()

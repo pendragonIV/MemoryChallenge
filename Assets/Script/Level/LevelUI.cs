@@ -16,7 +16,21 @@ public class LevelUI : MonoBehaviour
     private Color playerColor;
     [SerializeField]
     private Color enemyColor;
-    
+
+    public static LevelUI instance;
+
+    private void Awake()
+    {
+        if(instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
     public void Init(List<Level> levels)
     {
         // Clear all level buttons in level container (bc we have 2 modes: single player and multiplayer)

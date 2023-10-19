@@ -20,18 +20,16 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public LevelUI levelUI;
-
     public int currentLevelRows;
     public int currentLevelColumns;
 
     public void LoadMultiPlayerLevel()
     {
-        levelUI.Init(levelsData.GetMultiPlayerLevels());
+        LevelUI.instance.Init(levelsData.GetMultiPlayerLevels());
     }
 
     public void LoadSinglePlayerLevel()
     {
-        levelUI.Init(levelsData.GetSinglePlayerLevels());
+        LevelUI.instance.Init(levelsData.GetSinglePlayerLevels());
     }
 }

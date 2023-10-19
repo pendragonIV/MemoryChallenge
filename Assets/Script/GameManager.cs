@@ -18,11 +18,15 @@ public class GameManager : MonoBehaviour
     }
 
     public CartInit cartInit;
+    public Dictionary<string,int> ingameCards;
 
     private void Start()
     {
-        cartInit = gameObject.GetComponent<CartInit>();
+        ingameCards = new Dictionary<string, int>();
 
+        cartInit = gameObject.GetComponent<CartInit>();
         cartInit.InitializeCard(LevelManager.instance.currentLevelColumns, LevelManager.instance.currentLevelRows);
+
+        cartInit.SetCard();
     }
 }
