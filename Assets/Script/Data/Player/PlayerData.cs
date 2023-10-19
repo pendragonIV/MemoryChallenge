@@ -118,6 +118,7 @@ public struct Animal
 {
     public AnimalType animalType;
     public Sprite animalImage;
+    public Sprite animalLoseImg;
     public int price;
     public bool isBought;
     public bool isUsing;
@@ -129,6 +130,7 @@ public struct Animal
             animalType = this.animalType,
             price = this.price,
             animalImage = this.animalImage,
+            animalLoseImg = this.animalLoseImg,
             isBought = isBought,
             isUsing = isUsing
         };

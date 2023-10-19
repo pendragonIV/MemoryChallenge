@@ -12,35 +12,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f472a1425436cc24cb218ae79e6b9542, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  gold: 500
+  gold: 100
   animals:
   - animalType: 5
     animalImage: {fileID: 21300000, guid: 17cae7cd8005b0e4c8de536b83ecd2cd, type: 3}
+    animalLoseImg: {fileID: 21300000, guid: f1b8bbe38e41c7d46adfb60409a9e4c8, type: 3}
     price: 0
     isBought: 1
     isUsing: 1
   - animalType: 0
     animalImage: {fileID: 21300000, guid: df88dc3438215074eb6f88ff4992208c, type: 3}
+    animalLoseImg: {fileID: 21300000, guid: d1c3e1ac4306f8746b23ff6f3453a699, type: 3}
     price: 500
     isBought: 0
     isUsing: 0
   - animalType: 1
     animalImage: {fileID: 21300000, guid: eb5ba9bdaede4b64091734aae06a1cb5, type: 3}
+    animalLoseImg: {fileID: 21300000, guid: 817fe6567363b9a4f9e8d436671a49c5, type: 3}
     price: 500
     isBought: 0
     isUsing: 0
   - animalType: 2
     animalImage: {fileID: 21300000, guid: df3af264fc1c58d49886858bf1a3be97, type: 3}
+    animalLoseImg: {fileID: 21300000, guid: 090d0524eccecff4aa48a38a44b613b7, type: 3}
     price: 500
     isBought: 0
     isUsing: 0
   - animalType: 3
     animalImage: {fileID: 21300000, guid: 87a352693f2140747b02c1e63be3b88e, type: 3}
+    animalLoseImg: {fileID: 21300000, guid: 666cfe7b3997d9e42ad7d88d291ea4a9, type: 3}
     price: 500
     isBought: 0
     isUsing: 0
   - animalType: 4
     animalImage: {fileID: 21300000, guid: 7189e9156d688684e8cd5ed9d13ca583, type: 3}
+    animalLoseImg: {fileID: 21300000, guid: f6997d4dde5272c42a6fabc81ab5a3e3, type: 3}
     price: 400
     isBought: 0
     isUsing: 0

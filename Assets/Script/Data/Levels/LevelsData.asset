@@ -15,11 +15,11 @@ MonoBehaviour:
   singlePlayerLevels:
   - isSinglePlayer: 1
     isPlayable: 1
-    isCompleted: 0
+    isCompleted: 1
     rows: 4
     columns: 3
     enemyPoints: 0
-    playerPoints: 0
+    playerPoints: 6
   - isSinglePlayer: 1
     isPlayable: 1
     isCompleted: 0

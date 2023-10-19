@@ -18,6 +18,11 @@ public class LevelsData :ScriptableObject
         singlePlayerLevels[index] = singlePlayerLevels[index].ChangeLevelIn4(isPlayable, isCompleted, 0, playerPoint);
     }
 
+    public int IndexOfSinglePlayerLevel(Level level)
+    {
+        return singlePlayerLevels.IndexOf(level);
+    }
+
     public Level GetSinglePlayerLevel(int index)
     {
         return singlePlayerLevels[index];

@@ -11,7 +11,8 @@ public class LevelHolder : MonoBehaviour, IPointerClickHandler
     {
         LevelManager.instance.currentLevelRows = levelData.rows;
         LevelManager.instance.currentLevelColumns = levelData.columns;
-        
+        LevelManager.instance.currentLevel = levelData;
+
         ChangeToGameScene();
     }
 
