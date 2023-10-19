@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f472a1425436cc24cb218ae79e6b9542, type: 3}
+  m_Name: PlayerData
+  m_EditorClassIdentifier: 
+  gold: 0
+  animals:
+  - animalType: 5
+    animalImage: {fileID: 21300000, guid: 17cae7cd8005b0e4c8de536b83ecd2cd, type: 3}
+    price: 0
+    isBought: 1
+    isUsing: 1
+  - animalType: 0
+    animalImage: {fileID: 21300000, guid: df88dc3438215074eb6f88ff4992208c, type: 3}
+    price: 500
+    isBought: 0
+    isUsing: 0
+  - animalType: 1
+    animalImage: {fileID: 21300000, guid: eb5ba9bdaede4b64091734aae06a1cb5, type: 3}
+    price: 500
+    isBought: 0
+    isUsing: 0
+  - animalType: 2
+    animalImage: {fileID: 21300000, guid: df3af264fc1c58d49886858bf1a3be97, type: 3}
+    price: 500
+    isBought: 0
+    isUsing: 0
+  - animalType: 3
+    animalImage: {fileID: 21300000, guid: 87a352693f2140747b02c1e63be3b88e, type: 3}
+    price: 500
+    isBought: 0
+    isUsing: 0
+  - animalType: 4
+    animalImage: {fileID: 21300000, guid: 7189e9156d688684e8cd5ed9d13ca583, type: 3}
+    price: 400
+    isBought: 0
+    isUsing: 0
+  currentAnimal:
+    animalType: 0
+    animalImage: {fileID: 0}
+    price: 0
+    isBought: 0
+    isUsing: 0
