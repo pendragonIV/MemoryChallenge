@@ -25,17 +25,32 @@ public class LevelManager : MonoBehaviour
     public Level currentLevel;
     public int currentLevelIndex;
 
-    public void SetCurrentLevelPlayerPoint(int currentPoint)
+
+    public void SetCurrentLevelPlayerPoint(int currentPoint, int enemyPoint, int playerPoint)
     {
         int maxPoint = currentLevelRows * currentLevelColumns / 2;
-        if(currentPoint < maxPoint && currentPoint > levelsData.GetSinglePlayerLevel(currentLevelIndex).playerPoints)
+        if (currentLevel.isSinglePlayer)
         {
-            levelsData.SetSinglePlayerLevel(currentLevelIndex, true, false, currentPoint);
+            if (currentPoint < maxPoint && currentPoint > levelsData.GetSinglePlayerLevel(currentLevelIndex).playerPoints)
+            {
+                levelsData.SetSinglePlayerLevel(currentLevelIndex, true, false, currentPoint);
+            }
+            else if (currentPoint == maxPoint)
+            {
+                CompleteLevel(currentLevelIndex, maxPoint);
+            }
         }
-        else if(currentPoint == maxPoint)
+        else
         {
-            CompleteLevel(currentLevelIndex, maxPoint);
+            if(currentPoint <= maxPoint || playerPoint + enemyPoint <= maxPoint)
+            {
+                if(playerPoint > levelsData.GetMultiPlayerLevel(currentLevelIndex).playerPoints || enemyPoint > levelsData.GetMultiPlayerLevel(currentLevelIndex).enemyPoints)
+                {
+                    levelsData.SetMultiPlayerLevel(currentLevelIndex, true, false, enemyPoint, playerPoint);
+                }
+            }
         }
+       
     }
 
     public void CompleteLevel(int index, int maxPoint)

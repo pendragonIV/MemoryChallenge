@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class GameScene : MonoBehaviour
@@ -13,6 +15,7 @@ public class GameScene : MonoBehaviour
     [SerializeField]
     private Transform gameOverPanel;
 
+    #region Win and Lose Panel
     [SerializeField] 
     private Transform winPanel;
     [SerializeField]
@@ -21,6 +24,8 @@ public class GameScene : MonoBehaviour
     private Text winCoin;
     [SerializeField]
     private Image playerWinImg;
+    [SerializeField]
+    private Text winPanelText;
 
     [SerializeField]
     private Transform losePanel;
@@ -31,34 +36,43 @@ public class GameScene : MonoBehaviour
     [SerializeField]
     private Image playerLoseImg;
 
+    #endregion
+
     [SerializeField]
     private Transform gameOverlay;
     [SerializeField]
     private Button playButton;
 
     [SerializeField]
-    private Transform gameArea;
+    public Transform gameArea;
 
+    #region Score
     [SerializeField]
     private Transform wolfScore;
     [SerializeField]
     private Text wolfScoreText;
     [SerializeField]
+    private Image wolfImg;
+    [SerializeField]
+    private Image playerImg;
+    [SerializeField]
     private Transform playerScore;
     [SerializeField]
     private Text playerScoreText;
-
-    [SerializeField]
-    private Transform healthContainer;
-    [SerializeField]
-    private Transform healthPrefab;
+    #endregion
 
     [SerializeField]
     private Text coin;
+    [SerializeField]
+    private Color defaultColor;
+    [SerializeField]
+    private Color disabledColor;
+   
 
     private void Start()
     {
         coin.text = GameManager.instance.playerData.GetGold().ToString();
+        playerImg.sprite = GameManager.instance.playerData.GetAnimalAt(GameManager.instance.playerData.GetCurrentAnimalIndex()).animalImage;
         gameOverlay.gameObject.SetActive(true);
         playButton.gameObject.SetActive(true);  
 
@@ -66,12 +80,14 @@ public class GameScene : MonoBehaviour
         {
             wolfScore.gameObject.SetActive(true);
             playerScore.gameObject.SetActive(true);
+            SetWolfScore(0);
+            SetPlayerScore(0);
         }
         else
         {
             wolfScore.gameObject.SetActive(false);
             playerScore.gameObject.SetActive(true);
-            SetSinglePlayerScore(0);
+            SetPlayerScore(0);
         }
     }
 
@@ -80,9 +96,16 @@ public class GameScene : MonoBehaviour
         wolfScoreText.text = score.ToString();
     }
 
-    public void SetSinglePlayerScore(int score)
+    public void SetPlayerScore(int score)
     {
-        playerScoreText.text = score.ToString() + "/" + (LevelManager.instance.currentLevelColumns * LevelManager.instance.currentLevelRows)/2;
+        if (LevelManager.instance.currentLevel.isSinglePlayer)
+        {
+            playerScoreText.text = score.ToString() + "/" + (LevelManager.instance.currentLevelColumns * LevelManager.instance.currentLevelRows) / 2;
+        }
+        else
+        {
+            playerScoreText.text = score.ToString();
+        }
     }
 
     public void PlayGame()
@@ -99,18 +122,27 @@ public class GameScene : MonoBehaviour
         gameOverPanel.gameObject.SetActive(true);
     }
 
-    public void SetGameOverSingle(Sprite playerImg, int coin, int score, int maxScore)
-    {
-        loseScore.text = score + "/" + maxScore;
-        loseCoin.text = coin.ToString();
-        playerLoseImg.sprite = playerImg;
-    }
-
     public void WinGame()
     {
         gameOverlay.gameObject.SetActive(true);
         panelWindow.gameObject.SetActive(true);
         winPanel.gameObject.SetActive(true);
+        winPanelText.text = "You Win";
+    }
+
+    public void DrawGame()
+    {
+        gameOverlay.gameObject.SetActive(true);
+        panelWindow.gameObject.SetActive(true);
+        winPanel.gameObject.SetActive(true);
+        winPanelText.text = "Draw";
+    }
+
+    public void SetLosePanel(Sprite playerImg, int coin, int playerScore, int enemyScore)
+    {
+        loseScore.text = playerScore + " : " + enemyScore;
+        loseCoin.text = coin.ToString();
+        playerLoseImg.sprite = playerImg;
     }
 
     public void SetWinSinglePanel(Sprite playerImg, int coin, int score, int maxScore)
@@ -120,39 +152,58 @@ public class GameScene : MonoBehaviour
         playerWinImg.sprite = playerImg;
     }
 
+    public void SetWinMultiPlayerPanel(Sprite playerImg, int coin, int playerScore, int enemyScore)
+    {
+        winScore.text = playerScore + " : " + enemyScore;
+        winCoin.text = coin.ToString();
+        playerWinImg.sprite = playerImg;
+    }
+
     public void FaceDownAllCards()
     {
         foreach(Transform child in gameArea)
         {
             child.GetChild(0).gameObject.SetActive(true);
+            StartCoroutine(FlipCardAnimation(child, child.GetComponent<Animator>()));
         }
     }
 
     public void FaceDownCard(int index)
     {
         gameArea.GetChild(index).GetChild(0).gameObject.SetActive(true);
+        StartCoroutine(FlipCardAnimation(gameArea.GetChild(index), gameArea.GetChild(index).GetComponent<Animator>()));
+    }
+
+    private IEnumerator FlipCardAnimation(Transform obj, Animator animator)
+    {
+        animator.enabled = true;
+        animator.Play("Card");
+        yield return new WaitForSecondsRealtime(1f);
+        animator.enabled = false;
+        obj.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        obj.GetChild(0).gameObject.SetActive(true);
+    }
+
+    public Transform FlipCard(int index)
+    {
+        gameArea.GetChild(index).GetComponent<CanvasGroup>().blocksRaycasts = false;
+        return gameArea.GetChild(index);
+    }
+
+    public IEnumerator FlipCardAnimation(int index, Transform transform)
+    {
+        Animator animator = transform.GetComponent<Animator>();
+        animator.enabled = true;
+        animator.Play("CardReverse");
+        yield return new WaitForSecondsRealtime(1f);
+        animator.enabled = false;
+        gameArea.GetChild(index).transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void DestroyCard(int index)
     {
         gameArea.GetChild(index).GetComponent<Image>().color = new Color(0,0,0,0);
         gameArea.GetChild(index).GetComponent<CanvasGroup>().blocksRaycasts = false;
-    }
-
-    public void UpdateHealth(int currentHealth)
-    {
-        foreach(Transform child in healthContainer)
-        {
-            Destroy(child.gameObject);
-        }
-        for(int i = 0; i< 3; i++)
-        {
-            Transform health = Instantiate(healthPrefab, healthContainer);
-            if(i > currentHealth - 1)
-            {
-                health.GetChild(1).gameObject.SetActive(false);
-            }
-        }
     }
 
     public void PauseGame()
@@ -167,5 +218,19 @@ public class GameScene : MonoBehaviour
         gameOverlay.gameObject.SetActive(false);
         panelWindow.gameObject.SetActive(false);
         pausePanel.gameObject.SetActive(false);
+    }
+
+    public void ChangeTurn(bool isPlayerTurn)
+    {
+        if (isPlayerTurn)
+        {
+            wolfImg.color = disabledColor;
+            playerImg.color = defaultColor;
+        }
+        else
+        {
+            wolfImg.color = defaultColor;
+            playerImg.color = disabledColor;
+        }
     }
 }

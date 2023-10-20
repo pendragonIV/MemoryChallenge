@@ -16,11 +16,23 @@ public class MainMenu : MonoBehaviour
     private PlayerData playerData;
     [SerializeField]
     private List<Image> playerImg;
+    [SerializeField]
+    private Transform singlePlayerMode;
+    [SerializeField]
+    private Transform multiPlayerMode;
 
     private void OnEnable()
     {
         SetCoin();
         SetPlayerImg();
+        if (LevelManager.instance.currentLevel.isSinglePlayer)
+        {
+            LoadSinglePlayerLevel();
+        }
+        else
+        {
+            LoadMultiPlayerLevel();
+        }
     }
 
     private void SetCoin()
@@ -56,8 +68,24 @@ public class MainMenu : MonoBehaviour
             currentMode.GetChild(2).gameObject.SetActive(false);
         }
         //Tick selected mode
-        currentMode = EventSystem.current.currentSelectedGameObject.transform;
+        if(EventSystem.current.currentSelectedGameObject != null)
+        {
+            currentMode = EventSystem.current.currentSelectedGameObject.transform;
+        }
+        if (currentMode == null)
+        {
+            if(LevelManager.instance.currentLevel.isSinglePlayer)
+            {
+                currentMode = singlePlayerMode;
+            }
+            else
+            {
+                currentMode = multiPlayerMode;
+            }
+        }
+
         Transform tick = currentMode.GetChild(2);
         tick.gameObject.SetActive(true);
+
     }
 }

@@ -40,6 +40,11 @@ public class LevelsData :ScriptableObject
         multiPlayerLevels[index] = multiPlayerLevels[index].ChangeLevelIn4(isPlayable, isCompleted, enemyPoint, playerPoint);
     }
 
+    public int IndexOfMultiPlayerLevel(Level level)
+    {
+        return multiPlayerLevels.IndexOf(level);
+    }
+
     public Level GetMultiPlayerLevel(int index)
     {
         return multiPlayerLevels[index];
