@@ -22,7 +22,7 @@ public class CharacterShop : MonoBehaviour
             Shop.instance.playerData.SetAnimalStatus(Shop.instance.playerData.GetCurrentAnimalIndex(), true, false);
             Shop.instance.playerData.SetCurrentAnimalIndex(int.Parse(transform.name));
             Shop.instance.playerData.SetAnimalStatus(Shop.instance.playerData.GetCurrentAnimalIndex(), true, true);
-
+            Shop.instance.playerData.SaveDataJSON();    
             Shop.instance.ShopInitialize();
         }
         else

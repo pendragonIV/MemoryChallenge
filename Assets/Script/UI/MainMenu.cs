@@ -23,15 +23,16 @@ public class MainMenu : MonoBehaviour
 
     private void OnEnable()
     {
+        playerData.LoadDataJSON();
         SetCoin();
         SetPlayerImg();
-        if (LevelManager.instance.currentLevel.isSinglePlayer)
-        {
-            LoadSinglePlayerLevel();
+        if (!LevelManager.instance.currentLevel.isSinglePlayer)
+        { 
+            LoadMultiPlayerLevel();
         }
         else
         {
-            LoadMultiPlayerLevel();
+            LoadSinglePlayerLevel();
         }
     }
 

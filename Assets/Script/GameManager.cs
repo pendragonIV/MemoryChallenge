@@ -71,12 +71,13 @@ public class GameManager : MonoBehaviour
 
     public void CheckIfCardMatch()
     {
+        StopCoroutine(Checking());
         StartCoroutine(Checking());
     }
 
     private IEnumerator Checking()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.2f);
 
         if (firstCardID == secondCardID)
         {
@@ -120,6 +121,7 @@ public class GameManager : MonoBehaviour
         if (currentScore == (LevelManager.instance.currentLevelColumns * LevelManager.instance.currentLevelRows) / 2)
         {
             isGameEnded = true;
+
             if (LevelManager.instance.currentLevel.isSinglePlayer)
             {
                 playerData.SetGold(playerData.GetGold() + 10 * currentScore);
@@ -130,6 +132,8 @@ public class GameManager : MonoBehaviour
                     if(!LevelManager.instance.levelsData.GetSinglePlayerLevel(LevelManager.instance.currentLevelIndex + 1).isPlayable)
                     {
                         LevelManager.instance.levelsData.SetSinglePlayerLevel(LevelManager.instance.currentLevelIndex + 1, true, false, 0);
+                        LevelManager.instance.levelsData.SaveDataJSON();
+                        playerData.SaveDataJSON();
                     }
                 }
             }
@@ -145,6 +149,8 @@ public class GameManager : MonoBehaviour
                         if (!LevelManager.instance.levelsData.GetMultiPlayerLevel(LevelManager.instance.currentLevelIndex + 1).isPlayable)
                         {
                             LevelManager.instance.levelsData.SetMultiPlayerLevel(LevelManager.instance.currentLevelIndex + 1, true, false, 0, 0);
+                            LevelManager.instance.levelsData.SaveDataJSON();
+                            playerData.SaveDataJSON();
                         }
                     }
                 }

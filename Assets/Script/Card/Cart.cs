@@ -46,7 +46,7 @@ public class Cart : MonoBehaviour, IPointerClickHandler
         animator.enabled = true;
         animator.Play("CardReverse");   
         yield return new WaitForSecondsRealtime(1f);
-        animator.enabled = false;
         obj.transform.GetChild(0).gameObject.SetActive(false);
+        animator.enabled = false;
     }
 }

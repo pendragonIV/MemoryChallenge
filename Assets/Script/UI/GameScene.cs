@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -112,6 +113,7 @@ public class GameScene : MonoBehaviour
     {
         gameOverlay.gameObject.SetActive(false);
         playButton.gameObject.SetActive(false);
+
         FaceDownAllCards();
     }
 
@@ -119,6 +121,9 @@ public class GameScene : MonoBehaviour
     {
         gameOverlay.gameObject.SetActive(true);
         panelWindow.gameObject.SetActive(true);
+
+        FadeIn(panelWindow.GetComponent<CanvasGroup>(), panelWindow.GetComponent<RectTransform>());
+
         gameOverPanel.gameObject.SetActive(true);
     }
 
@@ -126,6 +131,9 @@ public class GameScene : MonoBehaviour
     {
         gameOverlay.gameObject.SetActive(true);
         panelWindow.gameObject.SetActive(true);
+
+        FadeIn(panelWindow.GetComponent<CanvasGroup>(), panelWindow.GetComponent<RectTransform>());
+
         winPanel.gameObject.SetActive(true);
         winPanelText.text = "You Win";
     }
@@ -134,6 +142,9 @@ public class GameScene : MonoBehaviour
     {
         gameOverlay.gameObject.SetActive(true);
         panelWindow.gameObject.SetActive(true);
+
+        FadeIn(panelWindow.GetComponent<CanvasGroup>(), panelWindow.GetComponent<RectTransform>());
+
         winPanel.gameObject.SetActive(true);
         winPanelText.text = "Draw";
     }
@@ -164,18 +175,19 @@ public class GameScene : MonoBehaviour
         foreach(Transform child in gameArea)
         {
             child.GetChild(0).gameObject.SetActive(true);
-            StartCoroutine(FlipCardAnimation(child, child.GetComponent<Animator>()));
+            StartCoroutine(FlipDownCardAnimation(child, child.GetComponent<Animator>()));
         }
     }
 
     public void FaceDownCard(int index)
     {
         gameArea.GetChild(index).GetChild(0).gameObject.SetActive(true);
-        StartCoroutine(FlipCardAnimation(gameArea.GetChild(index), gameArea.GetChild(index).GetComponent<Animator>()));
+        StartCoroutine(FlipDownCardAnimation(gameArea.GetChild(index), gameArea.GetChild(index).GetComponent<Animator>()));
     }
 
-    private IEnumerator FlipCardAnimation(Transform obj, Animator animator)
+    private IEnumerator FlipDownCardAnimation(Transform obj, Animator animator)
     {
+        obj.GetComponent<CanvasGroup>().blocksRaycasts = false;
         animator.enabled = true;
         animator.Play("Card");
         yield return new WaitForSecondsRealtime(1f);
@@ -196,8 +208,8 @@ public class GameScene : MonoBehaviour
         animator.enabled = true;
         animator.Play("CardReverse");
         yield return new WaitForSecondsRealtime(1f);
-        animator.enabled = false;
         gameArea.GetChild(index).transform.GetChild(0).gameObject.SetActive(false);
+        animator.enabled = false;
     }
 
     public void DestroyCard(int index)
@@ -210,11 +222,14 @@ public class GameScene : MonoBehaviour
     {
         gameOverlay.gameObject.SetActive(true);
         panelWindow.gameObject.SetActive(true);
+
+        FadeIn(panelWindow.GetComponent<CanvasGroup>(), panelWindow.GetComponent<RectTransform>());
+
         pausePanel.gameObject.SetActive(true);
     }
 
     public void ResumeGame()
-    {
+    {        
         gameOverlay.gameObject.SetActive(false);
         panelWindow.gameObject.SetActive(false);
         pausePanel.gameObject.SetActive(false);
@@ -232,5 +247,21 @@ public class GameScene : MonoBehaviour
             wolfImg.color = defaultColor;
             playerImg.color = disabledColor;
         }
+    }
+
+    private void FadeIn(CanvasGroup canvasGroup, RectTransform rectTransform)
+    {
+        canvasGroup.alpha = 0f;
+        rectTransform.transform.localPosition = new Vector3(0, -1000, 0);
+        rectTransform.DOAnchorPos(new Vector2(0, 0), 0.5f, false).SetEase(Ease.OutElastic);
+        canvasGroup.DOFade(1, .5f);
+    }
+
+    private void FadeOut(CanvasGroup canvasGroup, RectTransform rectTransform)
+    {
+        canvasGroup.alpha = 1f;
+        rectTransform.transform.localPosition = new Vector3(0, 0, 0);
+        rectTransform.DOAnchorPos(new Vector2(0, -1000), 0.5f, false).SetEase(Ease.InOutQuint);
+        canvasGroup.DOFade(0, .5f);
     }
 }

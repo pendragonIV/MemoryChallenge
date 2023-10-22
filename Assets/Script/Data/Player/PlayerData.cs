@@ -59,24 +59,29 @@ public class PlayerData : ScriptableObject
     public void SaveDataJSON()
     {
         string animalsData = JsonHelper.ToJson(animals.ToArray(), true);
+        WriteFile(animalsData, "/AnimalsData.json");
 
-        string content = "{\"gold\":" + gold + ",\"animals\":" + animalsData + ",\"currentAnimalIndex\":" + currentAnimalIndex + "}";
-        WriteFile(content);
+        string content = "{\"gold\":" + gold + ",\"currentAnimalIndex\":" + currentAnimalIndex + "}";
+        WriteFile(content, "/PlayerData.json");
     }
 
     public void LoadDataJSON()
     {
-        string content = ReadFile();
+        string content = ReadFile("/PlayerData.json");
+        string animalsData = ReadFile("/AnimalsData.json");
         if (content != null)
         {
-            // = new List<Level>(JsonHelper.FromJson<Level>(content).ToList());
-            Debug.Log(JsonHelper.FromJson<Level>(content));
+            JsonUtility.FromJsonOverwrite(content, this);
+        }
+        if(animalsData != null)
+        {
+            this.animals = new List<Animal>(JsonHelper.FromJson<Animal>(animalsData).ToList());
         }
     }
 
-    private void WriteFile(string content)
+    private void WriteFile(string content, string path)
     {
-        FileStream file = new FileStream(Application.persistentDataPath + "/PlayerData.json", FileMode.Create);
+        FileStream file = new FileStream(Application.persistentDataPath + path, FileMode.Create);
 
         using (StreamWriter writer = new StreamWriter(file))
         {
@@ -84,11 +89,11 @@ public class PlayerData : ScriptableObject
         }
     }
 
-    private string ReadFile()
+    private string ReadFile(string path)
     {
-        if (File.Exists(Application.persistentDataPath + "/PlayerData.json"))
+        if (File.Exists(Application.persistentDataPath + path))
         {
-            FileStream file = new FileStream(Application.persistentDataPath + "/PlayerData.json", FileMode.Open);
+            FileStream file = new FileStream(Application.persistentDataPath + path, FileMode.Open);
 
             using (StreamReader reader = new StreamReader(file))
             {

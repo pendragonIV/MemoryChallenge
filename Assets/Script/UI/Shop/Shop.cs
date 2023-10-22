@@ -38,6 +38,8 @@ public class Shop : MonoBehaviour
         {
             instance = this;
         }
+
+        playerData.LoadDataJSON();
     }
 
     private void Start()
@@ -134,6 +136,7 @@ public class Shop : MonoBehaviour
     {
         playerData.SetGold(playerData.GetGold() - playerData.GetAnimalAt(index).price);
         playerData.SetAnimalStatus(index, true, false);
+        playerData.SaveDataJSON();
     }
 
     public void ShowPopup(int index)

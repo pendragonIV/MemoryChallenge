@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LevelsData", menuName = "ScriptableObjects/LevelsData", order = 1)]
+[Serializable]
 public class LevelsData :ScriptableObject
 {
     [SerializeField]
@@ -62,23 +63,22 @@ public class LevelsData :ScriptableObject
         string singlePlayerLevelsData = JsonHelper.ToJson(singlePlayerLevels.ToArray(), true);
         string multiPlayerLevelsData = JsonHelper.ToJson(multiPlayerLevels.ToArray(), true);
 
-        string content = "{\"singlePlayerLevels\":" + singlePlayerLevelsData + ",\"multiPlayerLevels\":" + multiPlayerLevelsData + "}";
-        WriteFile(content);
+        WriteFile(singlePlayerLevelsData, "/SingleLevels.json");
+        WriteFile(multiPlayerLevelsData, "/MultiLevels.json");
     }
 
     public void LoadDataJSON()
     {
-        string content = ReadFile();
-        if (content != null)
-        {
-            //singlePlayerLevels = new List<Level>(JsonHelper.FromJson<Level>(content).ToList());
-            Debug.Log(JsonHelper.FromJson<Level>(content));
-        }
+        string singlePlayerLevelsData = ReadFile("/SingleLevels.json");
+        string multiPlayerLevelsData = ReadFile("/MultiLevels.json");
+        
+        this.singlePlayerLevels = new List<Level>(JsonHelper.FromJson<Level>(singlePlayerLevelsData).ToList());
+        this.multiPlayerLevels = new List<Level>(JsonHelper.FromJson<Level>(multiPlayerLevelsData).ToList());
     }
 
-    private void WriteFile(string content)
+    private void WriteFile(string content, string path)
     {
-        FileStream file = new FileStream(Application.persistentDataPath + "/PlayerLevels.json", FileMode.Create);
+        FileStream file = new FileStream(Application.persistentDataPath + path, FileMode.Create);
 
         using (StreamWriter writer = new StreamWriter(file))
         {
@@ -86,11 +86,11 @@ public class LevelsData :ScriptableObject
         }
     }
 
-    private string ReadFile()
+    private string ReadFile(string path)
     {
-        if (File.Exists(Application.persistentDataPath + "/PlayerLevels.json"))
+        if (File.Exists(Application.persistentDataPath + path))
         {
-            FileStream file = new FileStream(Application.persistentDataPath + "/PlayerLevels.json", FileMode.Open);
+            FileStream file = new FileStream(Application.persistentDataPath + path, FileMode.Open);
 
             using (StreamReader reader = new StreamReader(file))
             {

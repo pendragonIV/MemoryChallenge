@@ -18,6 +18,8 @@ public class LevelManager : MonoBehaviour
         {
             instance = this;
         }
+
+        levelsData.LoadDataJSON();
     }
 
     public int currentLevelRows;
@@ -66,5 +68,10 @@ public class LevelManager : MonoBehaviour
     public void LoadSinglePlayerLevel()
     {
         LevelUI.instance.Init(levelsData.GetSinglePlayerLevels());
+    }
+
+    private void OnApplicationQuit()
+    {
+        levelsData.SaveDataJSON();
     }
 }

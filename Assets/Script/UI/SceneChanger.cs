@@ -32,7 +32,7 @@ public class SceneChanger : MonoBehaviour
     {
         //Optional: Add animation here
 
-        yield return new WaitForSecondsRealtime(0f);
+        yield return new WaitForSecondsRealtime(.4f);
         SceneManager.LoadScene(sceneName);
     }
 }
