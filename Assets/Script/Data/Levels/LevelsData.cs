@@ -21,7 +21,13 @@ public class LevelsData :ScriptableObject
 
     public int IndexOfSinglePlayerLevel(Level level)
     {
-        return singlePlayerLevels.IndexOf(level);
+        foreach(var lv in singlePlayerLevels)
+        {
+            if (lv.rows == level.rows && lv.columns == level.columns)
+                return singlePlayerLevels.IndexOf(lv);
+        }
+       
+        return -1;
     }
 
     public Level GetSinglePlayerLevel(int index)
@@ -43,7 +49,13 @@ public class LevelsData :ScriptableObject
 
     public int IndexOfMultiPlayerLevel(Level level)
     {
-        return multiPlayerLevels.IndexOf(level);
+        foreach (var lv in multiPlayerLevels)
+        {
+            if (lv.rows == level.rows && lv.columns == level.columns)
+                return multiPlayerLevels.IndexOf(lv);
+        }
+
+        return -1;
     }
 
     public Level GetMultiPlayerLevel(int index)
@@ -72,8 +84,15 @@ public class LevelsData :ScriptableObject
         string singlePlayerLevelsData = ReadFile("/SingleLevels.json");
         string multiPlayerLevelsData = ReadFile("/MultiLevels.json");
         
-        this.singlePlayerLevels = new List<Level>(JsonHelper.FromJson<Level>(singlePlayerLevelsData).ToList());
-        this.multiPlayerLevels = new List<Level>(JsonHelper.FromJson<Level>(multiPlayerLevelsData).ToList());
+        if(singlePlayerLevelsData != null  && singlePlayerLevelsData != "{}")
+        {
+            this.singlePlayerLevels = new List<Level>(JsonHelper.FromJson<Level>(singlePlayerLevelsData).ToList());
+        }
+
+        if(multiPlayerLevelsData != null && multiPlayerLevelsData != "{}")
+        {
+            this.multiPlayerLevels = new List<Level>(JsonHelper.FromJson<Level>(multiPlayerLevelsData).ToList());
+        }
     }
 
     private void WriteFile(string content, string path)

@@ -69,11 +69,11 @@ public class PlayerData : ScriptableObject
     {
         string content = ReadFile("/PlayerData.json");
         string animalsData = ReadFile("/AnimalsData.json");
-        if (content != null)
+        if (content != null && content != "{}")
         {
             JsonUtility.FromJsonOverwrite(content, this);
         }
-        if(animalsData != null)
+        if(animalsData != null && animalsData != "{}")
         {
             this.animals = new List<Animal>(JsonHelper.FromJson<Animal>(animalsData).ToList());
         }
