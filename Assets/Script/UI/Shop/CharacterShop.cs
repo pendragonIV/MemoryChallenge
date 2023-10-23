@@ -28,8 +28,8 @@ public class CharacterShop : MonoBehaviour
         else
         {
             Shop.instance.ShowPopup(int.Parse(transform.name));
-            Shop.instance.SetCoin();
             Shop.instance.Buy(int.Parse(transform.name));
+            Shop.instance.SetCoin();
             Shop.instance.ShopInitialize();
         }
     }

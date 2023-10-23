@@ -19,7 +19,7 @@ MonoBehaviour:
     rows: 4
     columns: 3
     enemyPoints: 0
-    playerPoints: 6
+    playerPoints: 0
   - isSinglePlayer: 1
     isPlayable: 0
     isCompleted: 0
@@ -82,8 +82,8 @@ MonoBehaviour:
     isCompleted: 0
     rows: 4
     columns: 3
-    enemyPoints: 5
-    playerPoints: 1
+    enemyPoints: 0
+    playerPoints: 0
   - isSinglePlayer: 0
     isPlayable: 0
     isCompleted: 0
